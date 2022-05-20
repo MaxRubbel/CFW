@@ -2,8 +2,8 @@ import org.apache.tools.ant.filters.ReplaceTokens
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-group 'de.varoplugin'
-version '0.6.11'
+group 'dev.curth'
+version '0.6.12'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
