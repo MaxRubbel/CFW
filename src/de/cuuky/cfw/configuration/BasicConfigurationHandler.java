@@ -1,7 +1,7 @@
 package de.cuuky.cfw.configuration;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class BasicConfigurationHandler {
 
