@@ -40,3 +40,10 @@ test:
     paths:
       - build
       - .gradle
+
+deploy:
+  script:
+    - 'gradle publish'
+  only:
+    - master
+

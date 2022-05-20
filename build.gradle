@@ -31,6 +31,12 @@ repositories {
 	maven {
 		url 'https://oss.sonatype.org/content/repositories/snapshots'
 	}
+
+	maven {
+		url "https://curth.dev/api/v4/projects/73/packages/maven"
+		name "cfw"
+	}
+
 }
 	
 dependencies {
