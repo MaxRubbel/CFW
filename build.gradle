@@ -29,10 +29,8 @@ repositories {
 	}
 
 	maven {
-		url "https://curth.dev/api/v4/projects/73/packages/maven"
-		name "cfw"
+		url 'https://oss.sonatype.org/content/repositories/snapshots'
 	}
-
 }
 	
 dependencies {
@@ -77,11 +75,7 @@ publishing {
 
 	repositories {
 		maven {
-			url 'https://repo.varoplugin.de/repository/maven-releases/'
-			credentials {
-                username project.hasProperty('repouser') ? project.property('repouser').toString() : null
-                password project.hasProperty('repopassword') ? project.property('repopassword').toString() : null
-            }
+			url "https://curth.dev/api/v4/projects/73/packages/maven"
 		}
 	}
 }
