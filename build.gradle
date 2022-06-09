@@ -1,6 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
+apply plugin: 'checkstyle'
 
 group 'dev.curth'
 version '0.6.15'
@@ -9,16 +10,9 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 compileJava.options.encoding = 'UTF-8'
 
-sourceSets {
-	main {
-		java {
-			srcDirs 'src'
-		}
-
-		resources {
-			srcDirs 'resources'
-		}
-	}
+checkstyle {
+	configDirectory = '.' as File
+	toolVersion '9.3';
 }
 
 repositories {
@@ -34,7 +28,7 @@ repositories {
 }
 	
 dependencies {
-	compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
+	compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
 	compileOnly 'com.googlecode.json-simple:json-simple:1.1'
 }
 
