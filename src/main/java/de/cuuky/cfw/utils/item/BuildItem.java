@@ -1,13 +1,42 @@
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2020-2022 CuukyOfficial
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package de.cuuky.cfw.utils.item;
 
-import de.cuuky.cfw.version.VersionUtils;
-import de.cuuky.cfw.version.types.Materials;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import de.cuuky.cfw.version.VersionUtils;
+import de.cuuky.cfw.version.types.Materials;
 
 public class BuildItem {
 
@@ -20,7 +49,8 @@ public class BuildItem {
     private boolean deleteAnnotations;
 
     protected ItemMeta applyMeta(ItemMeta meta, Material type) {
-        if (displayName != null && type != Material.AIR) meta.setDisplayName(displayName);
+        if (displayName != null && type != Material.AIR)
+            meta.setDisplayName(displayName);
         enchantments.keySet().forEach(ent -> meta.addEnchant(ent, enchantments.get(ent), true));
         meta.setLore(this.lore);
         return meta;
@@ -29,8 +59,10 @@ public class BuildItem {
     public ItemStack build() {
         ItemStack stack = this.stack != null ? this.stack : new ItemStack(this.material);
         ItemMeta meta = stack.getItemMeta();
-        if (meta != null) stack.setItemMeta(this.applyMeta(meta, stack.getType()));
-        if (this.deleteAnnotations) VersionUtils.getVersionAdapter().deleteItemAnnotations(stack);
+        if (meta != null)
+            stack.setItemMeta(this.applyMeta(meta, stack.getType()));
+        if (this.deleteAnnotations)
+            VersionUtils.getVersionAdapter().deleteItemAnnotations(stack);
         stack.setAmount(amount);
         return stack;
     }
@@ -41,7 +73,8 @@ public class BuildItem {
     }
 
     public BuildItem addEnchantment(Enchantment enchantment, int amplifier) {
-        if (enchantment == null) return this;
+        if (enchantment == null)
+            return this;
         enchantments.put(enchantment, amplifier);
         return this;
     }
@@ -75,8 +108,8 @@ public class BuildItem {
     }
 
     public BuildItem addLore(String add) {
-    	if(this.lore == null)
-    		this.lore = new ArrayList<>();
+        if (this.lore == null)
+            this.lore = new ArrayList<>();
         this.lore.add(add);
         return this;
     }

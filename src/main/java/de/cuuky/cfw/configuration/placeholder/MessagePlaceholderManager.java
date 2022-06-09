@@ -1,15 +1,40 @@
-package de.cuuky.cfw.configuration.placeholder;
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2020-2022 CuukyOfficial
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
-import de.cuuky.cfw.configuration.placeholder.placeholder.type.PlaceholderType;
-import de.cuuky.cfw.manager.FrameworkManager;
-import de.cuuky.cfw.manager.FrameworkManagerType;
-import org.bukkit.plugin.java.JavaPlugin;
+package de.cuuky.cfw.configuration.placeholder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.cuuky.cfw.configuration.placeholder.placeholder.type.PlaceholderType;
+import de.cuuky.cfw.manager.FrameworkManager;
+import de.cuuky.cfw.manager.FrameworkManagerType;
 
 public class MessagePlaceholderManager extends FrameworkManager {
 
@@ -27,7 +52,8 @@ public class MessagePlaceholderManager extends FrameworkManager {
     }
 
     private String replaceByList(String value, List<MessagePlaceholder> list, Object... args) {
-        if (list == null) return null;
+        if (list == null)
+            return null;
         for (MessagePlaceholder pmp : list)
             value = pmp.replacePlaceholder(value, args);
         return value;
@@ -36,7 +62,8 @@ public class MessagePlaceholderManager extends FrameworkManager {
     public String replacePlaceholders(String value, PlaceholderType type, Object... objects) {
         Map<String, List<MessagePlaceholder>> reqs = cachedRequests.get(type);
         List<MessagePlaceholder> placeholders;
-        if (reqs == null) reqs = new HashMap<>();
+        if (reqs == null)
+            reqs = new HashMap<>();
         if ((placeholders = reqs.get(value)) == null) {
             reqs.put(value, placeholders = this.search(type, value));
             cachedRequests.put(type, reqs);

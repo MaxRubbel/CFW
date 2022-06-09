@@ -1,17 +1,46 @@
-package de.cuuky.cfw.inventory.list;
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2020-2022 CuukyOfficial
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
-import de.cuuky.cfw.inventory.*;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.ItemStack;
+package de.cuuky.cfw.inventory.list;
 
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.ItemStack;
+
+import de.cuuky.cfw.inventory.AdvancedInventoryManager;
+import de.cuuky.cfw.inventory.EventNotifiable;
+import de.cuuky.cfw.inventory.Info;
+import de.cuuky.cfw.inventory.ItemClick;
+import de.cuuky.cfw.inventory.PrioritisedInfo;
 
 public abstract class AdvancedEditInventory extends AdvancedItemShowInventory implements EventNotifiable {
 
@@ -46,7 +75,8 @@ public abstract class AdvancedEditInventory extends AdvancedItemShowInventory im
 
     private void updateCurrentContent() {
         ItemStack[] content = this.getInventory().getContents();
-        for (int i = 0; i < this.getUsableSize(); i++) this.contents.put(this.getCurrentIndex() + i, content[i]);
+        for (int i = 0; i < this.getUsableSize(); i++)
+            this.contents.put(this.getCurrentIndex() + i, content[i]);
     }
 
     protected int getEditPriority() {
@@ -101,14 +131,14 @@ public abstract class AdvancedEditInventory extends AdvancedItemShowInventory im
 
     @Override
     public void update() {
-        if (this.contents == null) this.loadItems();
+        if (this.contents == null)
+            this.loadItems();
         super.update();
     }
 
     @Override
     public void onInventoryDrag(InventoryDragEvent event) {
-        event.getInventorySlots().stream().filter(i -> !this.clickedContent(i))
-                .findFirst().ifPresent(integer -> event.getNewItems().remove(integer));
+        event.getInventorySlots().stream().filter(i -> !this.clickedContent(i)).findFirst().ifPresent(integer -> event.getNewItems().remove(integer));
     }
 
     @Override

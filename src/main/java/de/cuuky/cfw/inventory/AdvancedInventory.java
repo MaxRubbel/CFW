@@ -1,13 +1,28 @@
-package de.cuuky.cfw.inventory;
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2020-2022 CuukyOfficial
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
-import de.cuuky.cfw.inventory.inserter.DirectInserter;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
+package de.cuuky.cfw.inventory;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,20 +33,31 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
+import de.cuuky.cfw.inventory.inserter.DirectInserter;
+
 public abstract class AdvancedInventory extends InfoProviderHolder implements ContentRefreshable, DefaultInfoProvider {
 
-    private final Map<Supplier<ItemInfo>, Supplier<ItemClick>> selectors = new HashMap<Supplier<ItemInfo>, Supplier<ItemClick>>() {{
-        put(() -> AdvancedInventory.this.getInfo(Info.BACKWARDS_INFO),
-                () -> generateNavigator(AdvancedInventory.this::getCachedMin, -1));
-        put(() -> AdvancedInventory.this.getInfo(Info.FORWARDS_INFO),
-                () -> generateNavigator(AdvancedInventory.this::getCachedMax, 1));
-        put(() -> {
-            if (AdvancedInventory.this.previous == null) return null;
-            else return AdvancedInventory.this.getInfo(Info.BACK_INFO);
-        }, () -> event -> AdvancedInventory.this.back());
-        put(() -> AdvancedInventory.this.getInfo(Info.CLOSE_INFO),
-                () -> event -> close());
-    }};
+    private final Map<Supplier<ItemInfo>, Supplier<ItemClick>> selectors = new HashMap<Supplier<ItemInfo>, Supplier<ItemClick>>() {
+        {
+            put(() -> AdvancedInventory.this.getInfo(Info.BACKWARDS_INFO), () -> generateNavigator(AdvancedInventory.this::getCachedMin, -1));
+            put(() -> AdvancedInventory.this.getInfo(Info.FORWARDS_INFO), () -> generateNavigator(AdvancedInventory.this::getCachedMax, 1));
+            put(() -> {
+                if (AdvancedInventory.this.previous == null)
+                    return null;
+                else
+                    return AdvancedInventory.this.getInfo(Info.BACK_INFO);
+            }, () -> event -> AdvancedInventory.this.back());
+            put(() -> AdvancedInventory.this.getInfo(Info.CLOSE_INFO), () -> event -> close());
+        }
+    };
 
     private AdvancedInventory previous;
 
@@ -75,7 +101,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
 
     private ItemClick generateNavigator(Supplier<Integer> maxSup, int add) {
         int max = maxSup.get();
-        if ((add < 0 && this.page <= max) || (add > 0 && this.page >= max)) return null;
+        if ((add < 0 && this.page <= max) || (add > 0 && this.page >= max))
+            return null;
         return event -> this.setPage(this.page + add);
     }
 
@@ -94,7 +121,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
             AdvancedItemLink link = this.items.get(i);
             if (link == null) {
                 ItemStack filler = this.getFiller(i);
-                if (filler != null) stacks.put(i, filler);
+                if (filler != null)
+                    stacks.put(i, filler);
             } else
                 stacks.put(i, link.getStack());
         }
@@ -103,7 +131,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     }
 
     private void setSelector() {
-        if (this.getInfo(Info.HOTBAR_SIZE) == 0) return;
+        if (this.getInfo(Info.HOTBAR_SIZE) == 0)
+            return;
 
         for (Supplier<ItemInfo> infoSupplier : this.selectors.keySet()) {
             ItemInfo info;
@@ -120,18 +149,19 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     private boolean needsOpen() {
         InventoryView view = player.getOpenInventory();
         AdvancedInventory ai = this.manager.getInventory(view.getTopInventory());
-        if (ai == null || !(view.getTitle().equals(ai.getInfo(Info.TITLE))
-                && view.getTopInventory().getSize() == ai.getInfo(Info.SIZE))) {
+        if (ai == null || !(view.getTitle().equals(ai.getInfo(Info.TITLE)) && view.getTopInventory().getSize() == ai.getInfo(Info.SIZE))) {
             this.createInventory();
             return true;
-        } else this.inventory = view.getTopInventory();
+        } else
+            this.inventory = view.getTopInventory();
 
         this.inventory.clear();
         return false;
     }
 
     private void startTask() {
-        if (this.interval == -1) return;
+        if (this.interval == -1)
+            return;
 
         this.autoTask = new BukkitRunnable() {
             @Override
@@ -149,11 +179,14 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     void slotClicked(int slot, InventoryClickEvent event) {
         this.lastClickedSlot = slot;
         AdvancedItemLink link = this.items.get(slot);
-        if (link != null) link.run(event);
+        if (link != null)
+            link.run(event);
         this.updateProvider();
         this.playSound();
-        if (this.open && (link != null && link.hasLink())) this.update();
-        if (this.getInfo(Info.CANCEL_CLICK)) event.setCancelled(true);
+        if (this.open && (link != null && link.hasLink()))
+            this.update();
+        if (this.getInfo(Info.CANCEL_CLICK))
+            event.setCancelled(true);
     }
 
     void inventoryClosed() {
@@ -161,7 +194,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     }
 
     void addToInventory(int index, ItemStack stack, boolean overwrite) {
-        if (!overwrite && this.getInventory().getItem(index) != null) return;
+        if (!overwrite && this.getInventory().getItem(index) != null)
+            return;
         this.inventory.setItem(index, stack);
     }
 
@@ -182,11 +216,13 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     }
 
     protected void runOptionalEventNotification(Object object, Consumer<EventNotifiable> notifiableConsumer) {
-        if (object instanceof EventNotifiable) notifiableConsumer.accept((EventNotifiable) object);
+        if (object instanceof EventNotifiable)
+            notifiableConsumer.accept((EventNotifiable) object);
     }
 
     protected void runOptionalInventoryNotification(Object object, Consumer<InventoryNotifiable> notifiableConsumer) {
-        if (object instanceof InventoryNotifiable) notifiableConsumer.accept((InventoryNotifiable) object);
+        if (object instanceof InventoryNotifiable)
+            notifiableConsumer.accept((InventoryNotifiable) object);
     }
 
     protected int toInvSize(int entries) {
@@ -214,7 +250,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
 
     protected void playSound() {
         Consumer<Player> soundPlayer = this.getInfo(Info.PLAY_SOUND);
-        if (soundPlayer != null) soundPlayer.accept(getPlayer());
+        if (soundPlayer != null)
+            soundPlayer.accept(getPlayer());
     }
 
     protected void updateOthers(Function<AdvancedInventory, Boolean> filter) {
@@ -222,8 +259,9 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     }
 
     protected void back() {
-        this.close(false);
-        if (this.previous != null) this.previous.open();
+        this.close(true);
+        if (this.previous != null)
+            this.previous.open();
     }
 
     protected void setAutoRefresh(int interval) {
@@ -259,7 +297,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     }
 
     public void open() {
-        if (this.open) throw new IllegalStateException("Cannot reopen already opened inventory");
+        if (this.open)
+            throw new IllegalStateException("Cannot reopen already opened inventory");
         manager.registerInventory(this);
         new BukkitRunnable() {
 
@@ -280,7 +319,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
 
         this.inserter.stopInserting();
         this.runOptionalInventoryNotification(this, InventoryNotifiable::onClose);
-        if (close) this.player.closeInventory();
+        if (close)
+            this.player.closeInventory();
         this.open = false;
         this.manager.unregisterInventory(this);
     }
@@ -303,8 +343,10 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
         this.setSelector();
         int size = this.getInfo(Info.SIZE);
         this.inserter.setItems(manager.getOwnerInstance(), this, this.getContent(size), player, size);
-        if (!needsOpen) this.player.updateInventory();
-        else this.player.openInventory(this.inventory);
+        if (!needsOpen)
+            this.player.updateInventory();
+        else
+            this.player.openInventory(this.inventory);
 
         this.open = true;
         this.updating = false;
@@ -312,7 +354,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
 
     public void addItem(int index, ItemStack stack, ItemClick click) {
         this.items.put(index, new AdvancedItemLink(stack, click));
-        if (this.inserter.hasStarted()) this.addToInventory(index, stack, true);
+        if (this.inserter.hasStarted())
+            this.addToInventory(index, stack, true);
     }
 
     public void addItem(int index, ItemStack stack) {
@@ -320,7 +363,8 @@ public abstract class AdvancedInventory extends InfoProviderHolder implements Co
     }
 
     public void openNext(AdvancedInventory inventory) {
-        if (this.previous != inventory) inventory.setPrevious(this);
+        if (this.previous != inventory)
+            inventory.setPrevious(this);
         this.close(false);
     }
 

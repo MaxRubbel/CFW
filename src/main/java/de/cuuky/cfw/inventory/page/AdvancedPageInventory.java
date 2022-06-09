@@ -1,16 +1,45 @@
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2020-2022 CuukyOfficial
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package de.cuuky.cfw.inventory.page;
 
-import de.cuuky.cfw.inventory.AdvancedInventory;
-import de.cuuky.cfw.inventory.AdvancedInventoryManager;
-import de.cuuky.cfw.inventory.EventNotifiable;
-import de.cuuky.cfw.inventory.InfoProvider;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
-import java.util.*;
-import java.util.function.Supplier;
+import de.cuuky.cfw.inventory.AdvancedInventory;
+import de.cuuky.cfw.inventory.AdvancedInventoryManager;
+import de.cuuky.cfw.inventory.EventNotifiable;
+import de.cuuky.cfw.inventory.InfoProvider;
 
 public abstract class AdvancedPageInventory extends AdvancedInventory implements EventNotifiable {
 
@@ -44,8 +73,9 @@ public abstract class AdvancedPageInventory extends AdvancedInventory implements
     protected void registerPage(int page, Supplier<Page<?>> info) {
         this.pages.put(page, info);
         this.max = Math.max(max, page);
-        this.min = Math.min(min,page);
-        if (this.loaded.get(page) != null) this.loaded.put(page, info.get());
+        this.min = Math.min(min, page);
+        if (this.loaded.get(page) != null)
+            this.loaded.put(page, info.get());
     }
 
     protected void registerPage(int page, Runnable runnable, Supplier<Integer> size, Supplier<String> title) {
