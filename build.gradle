@@ -69,7 +69,7 @@ publishing {
 
 	repositories {
 		maven {
-			url "https://curth.dev/api/v4/projects/73/packages/maven"
+			url "https://curth.dev/api/v4/projects/75/packages/maven"
 			credentials(HttpHeaderCredentials) {
 				name = 'Job-Token'
 				value = System.getenv("CI_JOB_TOKEN")
