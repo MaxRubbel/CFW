@@ -194,6 +194,11 @@ public class FakeOfflinePlayer implements OfflinePlayer {
     }
 
     @Override
+    public Location getLastDeathLocation() {
+        return null;
+    }
+
+    @Override
     public PlayerProfile getPlayerProfile() {
         return null;
     }
